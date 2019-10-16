@@ -4,6 +4,7 @@ const session = require("koa-session");
 const shuffle = require("shuffle-array");
 const koaBody = require("koa-body");
 const render = require("koa-ejs");
+const cors = require("koa-cors");
 const path = require("path");
 const crypto = require("crypto");
 
@@ -35,8 +36,16 @@ const sh = w => {
 router.get("/join", async ctx => {
 	const w = await sh(words);
 
+	console.log(ctx.session.id);
+	if (ctx.session.id) {
+		console.log("Delete old session");
+		delete save[ctx.session.id];
+	}
+
 	const id = crypto.randomBytes(32).toString("hex");
-	ctx.session.id = id;
+	ctx.session = {
+		id: id,
+	};
 	save[id] = {
 		random: w,
 		answers: [],
@@ -44,11 +53,12 @@ router.get("/join", async ctx => {
 	};
 
 	console.log("You join the game");
-	//console.log(ctx.session);
+	console.log(ctx.session);
 	ctx.body = "You joined the game";
 });
 
 router.get("/next", ctx => {
+	console.log(ctx.session);
 	const s = save[ctx.session.id];
 
 	if (!s) {
@@ -142,6 +152,7 @@ router.get("/", async ctx => {
 	await ctx.render("game");
 });
 
+app.use(cors());
 app.use(koaBody());
 app.use(session(app));
 app.use(router.routes());

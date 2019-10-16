@@ -69,11 +69,10 @@
 				var settings = {
 					async: true,
 					crossDomain: true,
-					url: "http://localhost:3000/next",
+					url: "/next",
 					method: "GET",
 					headers: {
 						"cache-control": "no-cache",
-						Connection: "keep-alive",
 					},
 				};
 
@@ -88,11 +87,10 @@
 			var settings = {
 				async: true,
 				crossDomain: true,
-				url: "http://localhost:3000/end",
+				url: "/end",
 				method: "GET",
 				headers: {
 					"Cache-Control": "no-cache",
-					Connection: "keep-alive",
 				},
 			};
 
@@ -103,7 +101,9 @@
 				// 	<td>Otto</td>
 				// 	<td>@mdo</td>
 				// </tr>
-				$("#score").text(`Results : ${response.score}/${response.random.length}`);
+				$("#score").text(
+					`Results : ${response.score}/${response.random.length}`
+				);
 				for (let i = 0; i < response.answers.length; i++) {
 					const color = response.answers[i].good
 						? "success"
@@ -139,12 +139,11 @@
 				var settings = {
 					async: true,
 					crossDomain: true,
-					url: "http://localhost:3000/answer",
+					url: "/answer",
 					method: "POST",
 					headers: {
 						"Content-Type": "application/x-www-form-urlencoded",
 						"cache-control": "no-cache",
-						Connection: "keep-alive",
 					},
 					data: {
 						lang: todo.lang,
@@ -181,11 +180,10 @@
 			var settings = {
 				async: true,
 				crossDomain: true,
-				url: "http://localhost:3000/join",
+				url: "/join",
 				method: "GET",
 				headers: {
 					"Cache-Control": "no-cache",
-					Connection: "keep-alive",
 				},
 			};
 

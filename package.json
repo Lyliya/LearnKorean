@@ -11,6 +11,7 @@
   "dependencies": {
     "koa": "^2.10.0",
     "koa-body": "^4.1.1",
+    "koa-cors": "0.0.16",
     "koa-ejs": "^4.2.0",
     "koa-router": "^7.4.0",
     "koa-session": "^5.12.3",
