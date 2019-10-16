@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>Korean practice</title>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<link
+			rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+			integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+			crossorigin="anonymous"
+		/>
+	</head>
+	<body>
+		<div id="join">
+			<button id="join_button">Launch a game</button>
+		</div>
+		<div class="container" id="game" hidden="true">
+			<div class="row">
+				<form class="col-md-12" name="form">
+					<h3 class="text-center" id="ask"></h3>
+					<div class="form-group col-md-12">
+						<input
+							id="answer"
+							type="text"
+							class="form-control text-center input"
+						/>
+					</div>
+					<div class="col-md-12">
+						<button
+							type="button"
+							id="next"
+							class="btn btn-primary btn-block col"
+						>
+							Show answer
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="container" id="end" hidden="true">
+			<div class="row">
+				<h3 class="text-center" id="score">Results</h3>
+				<div class="form-group col-md-12">
+					<table class="table">
+						<thead>
+							<tr>
+								<th scope="col">#</th>
+								<th scope="col">Ask</th>
+								<th scope="col">Correct answer</th>
+								<th scope="col">Your answer</th>
+							</tr>
+						</thead>
+						<tbody id="answer_table"></tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>
+
+	<script>
+		let todo, n;
+		let showAnswer = true;
+		function next() {
+			return new Promise((resolve, reject) => {
+				var settings = {
+					async: true,
+					crossDomain: true,
+					url: "http://localhost:3000/next",
+					method: "GET",
+					headers: {
+						"cache-control": "no-cache",
+						Connection: "keep-alive",
+					},
+				};
+
+				$.ajax(settings).done(function(response) {
+					console.log(response);
+					resolve(response);
+				});
+			});
+		}
+
+		function endGame() {
+			var settings = {
+				async: true,
+				crossDomain: true,
+				url: "http://localhost:3000/end",
+				method: "GET",
+				headers: {
+					"Cache-Control": "no-cache",
+					Connection: "keep-alive",
+				},
+			};
+
+			$.ajax(settings).done(function(response) {
+				// <tr>
+				// 	<th scope="row">1</th>
+				// 	<td>Mark</td>
+				// 	<td>Otto</td>
+				// 	<td>@mdo</td>
+				// </tr>
+				$("#score").text(`Results : ${response.score}/${response.random.length}`);
+				for (let i = 0; i < response.answers.length; i++) {
+					const color = response.answers[i].good
+						? "success"
+						: "danger";
+					const content = `<tr class=${color}>
+							<th scope="row">${i}</th>
+							<td>${response.answers[i].ask}</td>
+							<td>${response.answers[i].correct}</td>
+							<td>${response.answers[i].answer}</ts>
+						</tr>`;
+					$("#answer_table").append(content);
+				}
+			});
+
+			$("#game").hide();
+			$("#end").show();
+		}
+
+		function nextEnd(nextWord) {
+			console.log(nextWord);
+			if (!nextWord.word) {
+				endGame();
+				$("#ask").text("FINI");
+			} else {
+				$("#ask").text(nextWord.word);
+				todo = nextWord;
+			}
+		}
+
+		$("#next").click(async function() {
+			// Send answer
+			if (showAnswer) {
+				var settings = {
+					async: true,
+					crossDomain: true,
+					url: "http://localhost:3000/answer",
+					method: "POST",
+					headers: {
+						"Content-Type": "application/x-www-form-urlencoded",
+						"cache-control": "no-cache",
+						Connection: "keep-alive",
+					},
+					data: {
+						lang: todo.lang,
+						ask: todo.word,
+						answer: $("#answer").val(),
+					},
+				};
+
+				$.ajax(settings).done(function(response) {
+					const l = todo.lang == "kr" ? "en" : "kr";
+					if (response.good) {
+						$("#ask").append(` = ${response.word[l]}`);
+						$("#ask").addClass("text-success");
+					} else {
+						$("#ask").append(` = ${response.word[l]}`);
+						$("#ask").addClass("text-danger");
+					}
+					n = response.next;
+					//nextEnd(response.next);
+					showAnswer = false;
+					$("#next").text("Next");
+				});
+			} else {
+				nextEnd(n);
+				showAnswer = true;
+				$("#ask").removeClass("text-danger");
+				$("#ask").removeClass("text-success");
+				$("#answer").val("");
+				$("#next").text("Show answer");
+			}
+		});
+
+		$("#join_button").click(function() {
+			var settings = {
+				async: true,
+				crossDomain: true,
+				url: "http://localhost:3000/join",
+				method: "GET",
+				headers: {
+					"Cache-Control": "no-cache",
+					Connection: "keep-alive",
+				},
+			};
+
+			$.ajax(settings).done(async function(response) {
+				const n = await next();
+				console.log(n);
+				$("#join").hide();
+				$("#game").show();
+				nextEnd(n);
+			});
+		});
+	</script>
+</html>
