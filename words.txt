@@ -62,14 +62,14 @@
 시장 = market
 영국 = UK
 독일 = Germany
-핀란드 = Finlande
+핀란드 = Finland
 러시아 = Russia
 한국 = South Korea
 일본 = Japan
 캐나다 = Canada
 프랑스 = France
 중국 = China
-태국 = Thailande
+태국 = Thailand
 호주 = Australia
 베트남 = Vietnam
 미국 = US

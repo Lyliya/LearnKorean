@@ -1,7 +1,5 @@
 {
 	"words": [
-		{ "en": "Hello", "kr": "안녕하세요" },
-		{ "en": "Thank you", "kr": "감사합니다" },
 		{ "en": "bus", "kr": "버스" },
 		{ "en": "banana", "kr": "바나나" },
 		{ "en": "mouse", "kr": "마우스" },
@@ -10,7 +8,7 @@
 		{ "en": "ticket", "kr": "표" },
 		{ "en": "cheese", "kr": "치즈" },
 		{ "en": "hat", "kr": "모자" },
-		{ "en": "grape", "kr": "포도" },
+		{ "en": "raison", "kr": "포도" },
 		{ "en": "hippopotamus", "kr": "하마" },
 		{ "en": "yoga", "kr": "요가" },
 		{ "en": "coffee", "kr": "커피" },
@@ -73,7 +71,7 @@
 		{ "en": "Canada", "kr": "캐나다" },
 		{ "en": "France", "kr": "프랑스" },
 		{ "en": "China", "kr": "중국" },
-		{ "en": "Thailande", "kr": "태국" },
+		{ "en": "Thailand", "kr": "태국" },
 		{ "en": "Australia", "kr": "호주" },
 		{ "en": "Vietnam", "kr": "베트남" },
 		{ "en": "US", "kr": "미국" },
